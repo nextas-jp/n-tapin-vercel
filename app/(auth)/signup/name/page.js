@@ -1,0 +1,48 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { TextField } from "@/components/TextField";
+import { PrimaryButton } from "@/components/Buttons";
+import { PageHeader } from "@/components/PageHeader";
+import { cardClassName } from "@/components/styles";
+
+export default function SignUpName() {
+  const router = useRouter();
+  const [username, setUserName] = useState("");
+
+  function handleSubmit(event) {
+    //TODO: Add signup logic (supabase?)
+    event.preventDefault();
+    router.push("/signup/avatar");
+  }
+
+  return (
+    <>
+      <PageHeader
+        backLinkUrl = "/login"
+        title="名前を入力してください。"
+      />
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
+        <div className={cardClassName}>
+          <TextField
+            id="username"
+            name="username"
+            label="ユーザーネーム"
+            type="text"
+            autoComplete="username"
+            placeholder="ユーザーネームを入力してください"
+            required
+            value={username}
+            onChange={(event) => setUserName(event.target.value)}
+          />
+        </div>
+        <div className={`${cardClassName} flex flex-col gap-[8px]`}>
+          <PrimaryButton>次へ</PrimaryButton>
+        </div>
+      </form>
+    </>
+  );
+}

@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
 import { cardClassName } from "@/components/styles";
-// import Image from "next/image";
+
+import { createBrowserClient } from "@/utils/supabase/client";
 
 export default function Login() {
   const router = useRouter();
@@ -15,10 +16,28 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [autoLogin, setAutoLogin] = useState(false);
 
-  function handleSubmit(event) {
-    //TODO: Add signin logic (supabase?)
+  async function handleSubmit(event) {
     event.preventDefault();
-    router.push("/dashboard");
+
+    try {
+      const supabase = createBrowserClient({ remember: autoLogin });
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (signInError) {
+        console.log(signInError);
+        
+        alert('メールアドレスまたはパスワードが正しくありません。');
+        return;
+      }
+
+      router.push("/dashboard");
+    } catch {
+      alert('ログインに失敗しました。しばらくしてからもう一度お試しください。');
+    }
   }
 
   return (
