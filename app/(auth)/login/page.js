@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
+import { PageHeader } from "@/components/PageHeader";
 import { cardClassName } from "@/components/styles";
 // import Image from "next/image";
 
@@ -22,11 +23,10 @@ export default function Login() {
 
   return (
     <>
-      {/* //TODO: change to PageHEader component */}
-      <header className="flex flex-col">
-        <h1 className="text-[28px] font-bold leading-[38px]">ログイン</h1>
-        <p className="text-[16px] leading-[22px]">メールアドレスとパスワードを入力してください。</p>
-      </header>
+      <PageHeader
+        title="ログイン"
+        description="メールアドレスとパスワードを入力してください。"
+      />
       
       <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
         <div className={cardClassName}>

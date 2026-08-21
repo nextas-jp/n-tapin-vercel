@@ -1,5 +1,7 @@
 import { Noto_Sans_JP, Inter } from "next/font/google";
+import { siteConfig } from "@/constants";
 import "./globals.css";
+
 
 const notoSans = Noto_Sans_JP({
   variable: "--font-noto-sans",
@@ -14,8 +16,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "TapIn",
-  description: "ATTENDANCE MANAGEMENT | POWERED BY NEXTAS",
+  title: siteConfig.title,
+  description: siteConfig.description,
 };
 
 export default function RootLayout({ children }) {

@@ -2,6 +2,9 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { siteConfig } from "@/constants";
+import { Logo } from "@/components/Logo";
+import { ViewTransition } from 'react';
 
 export default function RootScreen() {
   const router = useRouter();
@@ -21,12 +24,18 @@ export default function RootScreen() {
   }, [router]);
 
   return (
-    <div className="flex items-center">
-      <h1>DUMMY SPLASH SCREEN</h1>
-      <p className="absolute bottom-[10.31%] font-brand text-[7.73px] leading-none text-caption">
-        ATTENDANCE MANAGEMENT | POWERED BY NEXTAS
-      </p>
-    </div>
-    
+    <ViewTransition>
+      <main
+        role="status"
+        aria-label="読み込み中"
+        className="relative flex flex-1 flex-col items-center justify-center bg-background"
+      >
+        <div className="flex items-center gap-[20px] animate-bounce">
+          <div className="w-[70px] h-[70px]"><Logo /></div>
+          <span className="font-brand text-[42.5px] font-bold leading-none text-foreground">{siteConfig.title}</span>
+        </div>
+        <p className="absolute bottom-[10%] font-brand text-[8px] leading-none text-caption">ATTENDANCE MANAGEMENT | POWERED BY NEXTAS</p>
+      </main>
+    </ViewTransition>
   );
 }
