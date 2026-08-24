@@ -19,17 +19,11 @@ export function TextField({
     <div className="flex flex-col gap-[8px]">
       {showCounter ? (
         <div className="flex items-baseline justify-between">
-          <label htmlFor={id} className={labelClassName}>
-            {label}
-          </label>
-          <span className="text-[14px] leading-[19px]">
-            {value.length}/{maxLength}
-          </span>
+          <label htmlFor={id} className={labelClassName}>{label}</label>
+          <span className="text-[14px] leading-[20px]">{value.length}/{maxLength}</span>
         </div>
       ) : (
-        <label htmlFor={id} className={labelClassName}>
-          {label}
-        </label>
+        <label htmlFor={id} className={labelClassName}>{label}</label>
       )}
       <input
         id={id}

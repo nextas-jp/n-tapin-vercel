@@ -36,6 +36,10 @@ body {
   background-image: linear-gradient(10deg, #bdffbf 20%, #a9ffac 75%);
 }
 
+@utility bg-secondary-button {
+  background-color: #e8e8e8;
+}
+
 @utility shadow-card {
   box-shadow: 2px 2px 4px 0 rgb(0 0 0 / 0.15);
 }

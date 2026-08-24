@@ -7,10 +7,11 @@ import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
 import { cardClassName } from "@/components/styles";
+import { useSignup } from "../signup-context";
 
 export default function SignUpName() {
   const router = useRouter();
-  const [username, setUserName] = useState("");
+  const { username, setUsername } = useSignup();
 
   function handleSubmit(event) {
     //TODO: Add signup logic (supabase?)
@@ -36,7 +37,8 @@ export default function SignUpName() {
             placeholder="ユーザーネームを入力してください"
             required
             value={username}
-            onChange={(event) => setUserName(event.target.value)}
+            onChange={(event) => setUsername(event.target.value)}
+            maxLength="20"
           />
         </div>
         <div className={`${cardClassName} flex flex-col gap-[8px]`}>

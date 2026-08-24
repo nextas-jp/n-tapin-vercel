@@ -1,18 +1,17 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-
 import { useObjectUrl } from "@/hooks/use-object-url";
 
 const SignupContext = createContext(null);
 
 export function SignupProvider({ children }) {
   const [username, setUsername] = useState("");
-  const [photoUrl, setPhotoFile] = useObjectUrl();
+  const [avatarUrl, setAvatar] = useObjectUrl();
 
   return (
     <SignupContext.Provider
-      value={{ username, setUsername, photoUrl, setPhotoFile }}
+      value={{ username, setUsername, avatarUrl, setAvatar }}
     >
       {children}
     </SignupContext.Provider>

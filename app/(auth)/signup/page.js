@@ -1,10 +1,16 @@
 "use client";
 
+/* //MEMO:
+  現状、Signupの確認画面までいったら、次へのボタンを押すと、ログイン中の状態ではないので、
+  ログイン画面にリダイレクトされます。
+  confirm画面内に、セーフなログイン処理を加えるか、signup画面の段階でSupabaseへのuser登録と一緒にいれるか？？
+*/
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TextField } from "@/components/TextField";
-import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
+import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
 import { cardClassName } from "@/components/styles";
 

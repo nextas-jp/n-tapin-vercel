@@ -15,7 +15,7 @@ export function SecondaryButton({ children, type = "button", onClick }) {
     <button
       type={type}
       onClick={onClick}
-      className={`${buttonClassName} bg-button`}
+      className={`${buttonClassName} bg-secondary-button`}
     >{children}<i className="chevron-icon"></i></button>
   );
 }

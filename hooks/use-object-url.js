@@ -14,6 +14,7 @@ export function useObjectUrl() {
     if (url) {
       URL.revokeObjectURL(url); //cleanup
     }
+
     setUrl(file ? URL.createObjectURL(file) : null);
   }
 
