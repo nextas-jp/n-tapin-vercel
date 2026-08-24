@@ -75,7 +75,7 @@ export default function Signup() {
         <div className={`${cardClassName} flex flex-col gap-[8px]`}>
           <PrimaryButton>新規登録</PrimaryButton>
           <p className="text-center text-[16px] leading-[22px]">
-            <Link href="/login">アカウントをお持ちでない方は<span className="underline">こちら</span></Link>
+            <Link href="/login">アカウントをお持ちの方は<span className="underline">こちら</span></Link>
           </p>
         </div>
       </form>
