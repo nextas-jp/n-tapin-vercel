@@ -6,7 +6,7 @@ import { useState } from "react";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-import { cardClassName } from "@/components/styles";
+// import { cardClassName } from "@/components/styles"; //deprecated
 import { useSignup } from "../signup-context";
 
 export default function SignUpName() {
@@ -27,7 +27,7 @@ export default function SignUpName() {
       />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-        <div className={cardClassName}>
+        <div className="card-element">
           <TextField
             id="username"
             name="username"
@@ -41,7 +41,7 @@ export default function SignUpName() {
             maxLength="20"
           />
         </div>
-        <div className={`${cardClassName} flex flex-col gap-[8px]`}>
+        <div className="card-element flex flex-col gap-[8px]">
           <PrimaryButton>次へ</PrimaryButton>
         </div>
       </form>

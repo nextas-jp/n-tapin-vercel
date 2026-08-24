@@ -12,7 +12,7 @@ import { useState } from "react";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-import { cardClassName } from "@/components/styles";
+// import { cardClassName } from "@/components/styles"; // deprecated
 
 export default function Signup() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function Signup() {
       />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-        <div className={cardClassName}>
+        <div className="card-element">
           <TextField
             id="email"
             name="email"
@@ -48,7 +48,7 @@ export default function Signup() {
             onChange={(event) => setEmail(event.target.value)}
           />
         </div>
-        <div className={`${cardClassName} flex flex-col gap-[16px]`}>
+        <div className="card-element flex flex-col gap-[16px]">
           <TextField
             id="password"
             name="password"
@@ -72,7 +72,7 @@ export default function Signup() {
             onChange={(event) => setPasswordConfirm(event.target.value)}
           />
         </div>
-        <div className={`${cardClassName} flex flex-col gap-[8px]`}>
+        <div className="card-element flex flex-col gap-[8px]">
           <PrimaryButton>新規登録</PrimaryButton>
           <p className="text-center text-[16px] leading-[22px]">
             <Link href="/login">アカウントをお持ちの方は<span className="underline">こちら</span></Link>

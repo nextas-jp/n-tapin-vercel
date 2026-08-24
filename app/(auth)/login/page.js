@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-import { cardClassName } from "@/components/styles";
+// import { cardClassName } from "@/components/styles"; // deprecated
 
 import { createBrowserClient } from "@/utils/supabase/client";
 
@@ -48,7 +48,7 @@ export default function Login() {
       />
       
       <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-        <div className={cardClassName}>
+        <div className="card-element">
           <TextField
             id="email"
             name="email"
@@ -61,7 +61,7 @@ export default function Login() {
             onChange={(event) => setEmail(event.target.value)}
           />
         </div>
-        <div className={`${cardClassName} flex flex-col gap-[8px]`}>
+        <div className="card-element flex flex-col gap-[8px]">
           <TextField
             id="password"
             name="password"
@@ -89,7 +89,7 @@ export default function Login() {
             >次回から自動ログイン</label>
           </div>
         </div>
-        <div className={`${cardClassName} flex flex-col gap-[8px]`}>
+        <div className="card-element flex flex-col gap-[8px]">
           <PrimaryButton>ログイン</PrimaryButton>
           <p className="text-center text-[16px] leading-[22px]">
             <Link href="/signup">アカウントをお持ちでない方は<span className="underline">こちら</span></Link>

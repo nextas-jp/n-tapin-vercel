@@ -1,4 +1,4 @@
-const buttonClassName = "relative h-[59px] w-full rounded-[15px] text-[20px] font-bold leading-[27px] text-foreground";
+let buttonClassName = "relative h-[60px] w-full rounded-[15px] text-[20px] font-bold leading-[27px]";
 
 export function PrimaryButton({ children, type = "submit", onClick }) {
   return (
@@ -10,7 +10,11 @@ export function PrimaryButton({ children, type = "submit", onClick }) {
   );
 }
 
-export function SecondaryButton({ children, type = "button", onClick }) {
+export function SecondaryButton({ children, type = "button", onClick, isthin = false }) {
+  if (isthin) {
+    buttonClassName = "relative h-[44px] w-full rounded-[10px] text-[14px] leading-[20px]";
+  }
+
   return (
     <button
       type={type}

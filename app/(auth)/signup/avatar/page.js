@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-import { cardClassName } from "@/components/styles";
+// import { cardClassName } from "@/components/styles"; //deprecated
 import { useSignup } from "../signup-context";
 
 import ProfileAvatar from "@/components/ProfileAvatar";
@@ -46,12 +46,12 @@ export default function SignUpAvatar() {
       />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-        <div className={`${cardClassName} flex justify-center`}>
+        <div className="card-element flex justify-center">
           <ProfileAvatar
             avatarUrl={avatarUrl}
           />
         </div>
-        <div className={`${cardClassName} flex flex-col gap-[8px]`}>
+        <div className="card-element flex flex-col gap-[8px]">
           {avatarUrl ? (
             <>
               <PrimaryButton>次へ</PrimaryButton>
