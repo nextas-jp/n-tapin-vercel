@@ -7,8 +7,8 @@ import { useState } from "react";
  * //TODO: Add a useCallback for perf?? (check prototype)
  * @returns 
  */
-export function useObjectUrl() {
-  const [url, setUrl] = useState(null);
+export function useObjectUrl(initialUrl = null) {
+  const [url, setUrl] = useState(initialUrl);
 
   function setFile(file) {
     if (url) {

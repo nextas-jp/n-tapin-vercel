@@ -11,12 +11,13 @@ const UserContext = createContext(null);
 // プロフィール編集 changes the name
 // and photo that ホーム shows, 新規投稿 adds to its photo grid, and 出勤打刻 / 退勤打刻 set the work status. It all resets on reload until there is an API.
 export function UserProvider({ children }) {
-  const [name, setName] = useState(fakeUser.name);
+  const [name, setUsername] = useState(fakeUser.name);
   const [avatarUrl, setAvatarFile] = useObjectUrl(fakeUser.avatarUrl);
   const [posts, setPosts] = useState(fakeUser.posts);
   const [status, setStatus] = useState(fakeUser.status);
   const [clockedInAt, setClockedInAt] = useState(null);
   const [clockedOutAt, setClockedOutAt] = useState(null);
+
 
   const clockIn = useCallback((time) => {
     setStatus("onDuty");
@@ -48,7 +49,7 @@ export function UserProvider({ children }) {
           clockedInAt,
           clockedOutAt,
         },
-        setName,
+        setUsername,
         setAvatarFile,
         addPost,
         clockIn,

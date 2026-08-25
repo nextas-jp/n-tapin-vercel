@@ -1,14 +1,25 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { SecondaryButton } from "@/components/Buttons";
 import { Logo } from "@/components/Logo";
 import { useUser } from "../user-context";
 
 
-
 export default function Dashboard() {
+  const router = useRouter();
   const { user } = useUser();
+  const { posts } = user;
+
+  console.log(posts);
+
+  function handleProfileChangeJump(event) {
+    event.preventDefault();
+
+    router.push('/profile/edit');
+  }
+  
 
   return (
     <>
@@ -43,28 +54,47 @@ export default function Dashboard() {
 
       <div>
         <div className="card-element">
-          <p>{user.name}</p>
-          <p>未出勤</p>
+          <div className="flex items-center gap-[16px] mb-[16px]">
+            <div className="relative">
+              <Image
+                src={user.avatarUrl}
+                width={100}
+                height={100}
+                alt={`${user.name}のプロフィル画像`}
+                className="shrink-0 rounded-full object-cover"
+              />
+            </div>
+            <div>
+              <p>{user.name}</p>
+              <span>未出勤</span>
+            </div>
+          </div>
           <SecondaryButton
+            onClick={ e => handleProfileChangeJump(e) }
             isthin={true}
           >プロフィールを編集</SecondaryButton>
         </div>
 
         <div className="mt-[40px]">
           <ul className="grid grid-cols-3 gap-[8px]">
-            <li className="aspect-square overflow-hidden rounded-[10px] bg-field">
-              {/* <Image
-                width={112}
-                height={112}
-                className="size-full object-cover"
-              /> */}
-            </li>
-            {/* <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li>
-            <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li>
-            <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li>
-            <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li>
-            <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li>
-            <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li> */}
+            { posts.map(post => {
+              return(
+                <li
+                  key={post}
+                  className="aspect-square overflow-hidden rounded-[10px] bg-field"
+                >
+                  <Image
+                    src={post}
+                    width={112}
+                    height={112}
+                    className="size-full object-cover"
+                    alt="投稿のイメージ画像"
+                    loading="lazy"
+                  />
+                </li>
+              );
+            }) }
+            {/* <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li> */}
           </ul>
         </div>
       </div>
