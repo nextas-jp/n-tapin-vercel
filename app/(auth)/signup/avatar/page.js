@@ -10,8 +10,8 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 
 export default function SignUpAvatar() {
   const router = useRouter();
-  const { avatarUrl, setAvatar } = useSignup(); // MEMO: object here if typescript is used later
   const fileInputRef = useRef(null);
+  const { avatarUrl, setAvatarFile } = useSignup(); // MEMO: object here if typescript is used later
 
   function handleSubmit(event) {
     //TODO: Add supabase ressource saving
@@ -28,7 +28,7 @@ export default function SignUpAvatar() {
     const file = event.target.files?.[0];
 
     if (file) {
-      setAvatar(file);
+      setAvatarFile(file);
     }
   }
 

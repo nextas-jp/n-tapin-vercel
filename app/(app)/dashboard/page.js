@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { SecondaryButton } from "@/components/Buttons";
 import { Logo } from "@/components/Logo";
 import { useUser } from "../user-context";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
 
 export default function Dashboard() {
@@ -56,12 +57,16 @@ export default function Dashboard() {
         <div className="card-element">
           <div className="flex items-center gap-[16px] mb-[16px]">
             <div className="relative">
-              <Image
+              {/* <Image
                 src={user.avatarUrl}
                 width={100}
                 height={100}
                 alt={`${user.name}のプロフィル画像`}
                 className="shrink-0 rounded-full object-cover"
+              /> */}
+              <ProfileAvatar
+                avatarUrl={user.avatarUrl}
+                size={100}
               />
             </div>
             <div>

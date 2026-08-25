@@ -7,11 +7,11 @@ const SignupContext = createContext(null);
 
 export function SignupProvider({ children }) {
   const [username, setUsername] = useState("");
-  const [avatarUrl, setAvatar] = useObjectUrl();
+  const [avatarUrl, setAvatarFile] = useObjectUrl();
 
   return (
     <SignupContext.Provider
-      value={{ username, setUsername, avatarUrl, setAvatar }}
+      value={{ username, setUsername, avatarUrl, setAvatarFile }}
     >
       {children}
     </SignupContext.Provider>
