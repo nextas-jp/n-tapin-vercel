@@ -25,38 +25,40 @@ export default function ProfileEdit() {
         title="プロフィール編集"
       />
 
+      <section className="relative">
+        <div className="card-element flex flex-col items-center">
+          <figure>
+            <Image
+              src={user.avatarUrl}
+              width={140}
+              height={140}
+              loading="eager"
+              alt={`${user.name}のプロフィル画像`}
+              className="shrink-0 rounded-full object-cover mb-[16px]"
+            />
+          </figure>
+          <p className="text-[20px] leading-[27px] font-bold">
+            <Link
+              href=""
+              onClick={ e => handleAvatarChange(e) }
+            >写真を変更する</Link></p>
+        </div>
 
-      <div className="card-element flex flex-col items-center">
-        <figure>
-          <Image
-            src={user.avatarUrl}
-            width={140}
-            height={140}
-            loading="eager"
-            alt={`${user.name}のプロフィル画像`}
-            className="shrink-0 rounded-full object-cover mb-[16px]"
+        <div className="card-element">
+          <TextField
+            id="username"
+            name="username"
+            label="ユーザーネーム"
+            type="text"
+            autoComplete="username"
+            placeholder="ユーザーネームを入力してください"
+            required
+            value={user.name}
+            onChange={(event) => setUsername(event.target.value)}
+            maxLength="20"
           />
-        </figure>
-        <p className="text-[20px] leading-[27px] font-bold"><Link
-            href=""
-            onClick={ e => handleAvatarChange(e) }
-          >写真を変更する</Link></p>
-      </div>
-
-      <div className="card-element">
-        <TextField
-          id="username"
-          name="username"
-          label="ユーザーネーム"
-          type="text"
-          autoComplete="username"
-          placeholder="ユーザーネームを入力してください"
-          required
-          value={user.name}
-          onChange={(event) => setUsername(event.target.value)}
-          maxLength="20"
-        />
-      </div>
+        </div>
+      </section>
     </>
   );
 }

@@ -12,7 +12,6 @@ import { useState } from "react";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-// import { cardClassName } from "@/components/styles"; // deprecated
 
 export default function Signup() {
   const router = useRouter();
@@ -34,51 +33,53 @@ export default function Signup() {
         description="メールアドレスとパスワードを入力してください。"
       />
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-        <div className="card-element">
-          <TextField
-            id="email"
-            name="email"
-            label="メールアドレス"
-            type="email"
-            autoComplete="username"
-            placeholder="メールアドレスを入力してください"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div className="card-element flex flex-col gap-[16px]">
-          <TextField
-            id="password"
-            name="password"
-            label="パスワード"
-            type="password"
-            autoComplete="new-password"
-            placeholder="パスワードを入力してください"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <TextField
-            id="passwordConfirm"
-            name="passwordConfirm"
-            label="パスワード（確認用）"
-            type="password"
-            autoComplete="new-password"
-            placeholder="パスワードを再入力してください"
-            required
-            value={passwordConfirm}
-            onChange={(event) => setPasswordConfirm(event.target.value)}
-          />
-        </div>
-        <div className="card-element flex flex-col gap-[8px]">
-          <PrimaryButton>新規登録</PrimaryButton>
-          <p className="text-center text-[16px] leading-[22px]">
-            <Link href="/login">アカウントをお持ちの方は<span className="underline">こちら</span></Link>
-          </p>
-        </div>
-      </form>
+      <section className="relative">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
+          <div className="card-element">
+            <TextField
+              id="email"
+              name="email"
+              label="メールアドレス"
+              type="email"
+              autoComplete="username"
+              placeholder="メールアドレスを入力してください"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <div className="card-element flex flex-col gap-[16px]">
+            <TextField
+              id="password"
+              name="password"
+              label="パスワード"
+              type="password"
+              autoComplete="new-password"
+              placeholder="パスワードを入力してください"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <TextField
+              id="passwordConfirm"
+              name="passwordConfirm"
+              label="パスワード（確認用）"
+              type="password"
+              autoComplete="new-password"
+              placeholder="パスワードを再入力してください"
+              required
+              value={passwordConfirm}
+              onChange={(event) => setPasswordConfirm(event.target.value)}
+            />
+          </div>
+          <div className="card-element flex flex-col gap-[8px]">
+            <PrimaryButton>新規登録</PrimaryButton>
+            <p className="text-center text-[16px] leading-[22px]">
+              <Link href="/login">アカウントをお持ちの方は<span className="underline">こちら</span></Link>
+            </p>
+          </div>
+        </form>
+      </section>
     </>
   );
 }

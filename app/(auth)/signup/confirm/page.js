@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-// import { cardClassName } from "@/components/styles"; //deprecated
 import { useSignup } from "../signup-context";
 
 import ProfileAvatar from "@/components/ProfileAvatar";
@@ -28,18 +27,20 @@ export default function SignUpConfirm() {
         title="さぁ、始めましょう！"
       />
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-        <div className="card-element flex flex-col items-center gap-[16px]">
-          <ProfileAvatar
-            avatarUrl={avatarUrl}
-          />
-          <p className="text-[20px] leading-[27px] font-semibold">{username}</p>
-        </div>
-        <div className="card-element flex flex-col gap-[8px]">
-          <PrimaryButton>完了</PrimaryButton>
-          <SecondaryButton onClick={ e => handleBack(e) }>登録情報を修正する</SecondaryButton>
-        </div>
-      </form>
+      <section className="relative">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
+          <div className="card-element flex flex-col items-center gap-[16px]">
+            <ProfileAvatar
+              avatarUrl={avatarUrl}
+            />
+            <p className="text-[20px] leading-[27px] font-semibold">{username}</p>
+          </div>
+          <div className="card-element flex flex-col gap-[8px]">
+            <PrimaryButton>完了</PrimaryButton>
+            <SecondaryButton onClick={ e => handleBack(e) }>登録情報を修正する</SecondaryButton>
+          </div>
+        </form>
+      </section>
     </>
   );
 }

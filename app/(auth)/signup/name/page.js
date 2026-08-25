@@ -1,12 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
-// import { cardClassName } from "@/components/styles"; //deprecated
 import { useSignup } from "../signup-context";
 
 export default function SignUpName() {

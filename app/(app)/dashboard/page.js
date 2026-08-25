@@ -52,7 +52,7 @@ export default function Dashboard() {
         </button>
       </header>
 
-      <div>
+      <section className="relative">
         <div className="card-element">
           <div className="flex items-center gap-[16px] mb-[16px]">
             <div className="relative">
@@ -97,7 +97,7 @@ export default function Dashboard() {
             {/* <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li> */}
           </ul>
         </div>
-      </div>
+      </section>
     </>
   );
 }
