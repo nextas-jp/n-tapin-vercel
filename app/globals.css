@@ -48,6 +48,27 @@ body {
   background-color: red;
 }
 
+@utility nav-shadow {
+  box-shadow: 0 -4px 7.6px 2px rgb(0 0 0 / 0.03);
+}
+
+
+/* 共通
+******************************************/
+
+/* //MEMO: Raised disc behind the active bottom-nav tab. */
+@utility nav-raised-disc {
+  box-shadow: 0 4px 4px rgb(0 0 0 / 0.15),
+  inset 0 5px 4px rgb(0 0 0 / 0.05);
+}
+
+.has-nav-raised-disc::after {
+  @apply nav-raised-disc absolute top-1/2 -translate-y-1/2 -z-1 rounded-full size-[68px] bg-surface;
+
+  content: "";
+}
+
+
 
 /* 要素
 ******************************************/
@@ -60,6 +81,22 @@ body {
 }
 
 
+/* ステート
+******************************************/
+@utility off-duty-gradient {
+  background-image: linear-gradient(15.73deg, #ea4444 20.84%, #ff7171 75.66%);
+}
+@utility on-duty-gradient {
+  background-image: linear-gradient(15.73deg, #44ea49 20.84%, #71ff76 75.66%);
+}
+
+.offduty-state {
+  @apply off-duty-gradient text-shadow-[0_0_4px_#ea4343];
+}
+
+.onduty-state {
+  @apply off-duty-gradient text-shadow-[0_0_4px_#009405];
+}
 
 
 /* アイコン

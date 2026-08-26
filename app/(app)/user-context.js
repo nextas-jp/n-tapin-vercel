@@ -18,7 +18,6 @@ export function UserProvider({ children }) {
   const [clockedInAt, setClockedInAt] = useState(null);
   const [clockedOutAt, setClockedOutAt] = useState(null);
 
-
   const clockIn = useCallback((time) => {
     setStatus("onDuty");
     setClockedInAt(time);

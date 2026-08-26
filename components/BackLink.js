@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-export function BackLink({ href }) {
+export function BackLink({ href, onBackNavigate }) {
   return (
     <Link
       href={href}
+      onNavigate={onBackNavigate}
       aria-label="前の画面に戻る"
       className="flex size-[30px] items-center justify-center"
     ><i className="w-[30px] h-[30px]">

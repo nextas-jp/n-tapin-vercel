@@ -1,39 +1,54 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState, useRef } from "react";
+// import { useRouter } from "next/navigation";
+import { useRef, useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { useUser } from "../../user-context";
 import { TextField } from "@/components/TextField";
-import Image from "next/image";
+// import Image from "next/image";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import Link from "next/link";
 
 export default function ProfileEdit() {
-  const router = useRouter();
   const fileInputRef = useRef(null);
   const { user, setUsername, setAvatarFile } = useUser();
+  const [avatarFile, setAvatarFileLocal] = useState(null);
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState(user.avatarUrl);
+
+  // MEMO: cache current user name to revert back to it if the back button is it (useRef creates a mutable object)
+  const staticInitialUserCopy = useRef(null);
+  useEffect(() => {
+    staticInitialUserCopy.current = { ...user };
+  }, []);
 
   function openFilePicker() {
     fileInputRef.current?.click();
   }
 
   function handleMediaChange(event) {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      setAvatarFile(file);
-    }
+      const file = event.target.files?.[0];
+  
+      if (file) {
+        setAvatarFileLocal(file);
+        setAvatarPreviewUrl(URL.createObjectURL(file));
+      }
   }
 
   function updateProfile() {
-    // update superbase
+    if (avatarFile) setAvatarFile(avatarFile); // push to context only now
+    // update supabase
+  }
+
+  function revertUserState() {
+    setUsername(staticInitialUserCopy.current.name);
+    setAvatarPreviewUrl(staticInitialUserCopy.current.avatarUrl);
   }
 
   return(
     <>
       <PageHeader
         backLinkUrl="/dashboard"
+        onBackNavigate={revertUserState}
         title="プロフィール編集"
       >
         <Link href="/dashboard" onClick={updateProfile} className="text-[20px] leading-[27px] font-bold">完了</Link>
@@ -52,7 +67,7 @@ export default function ProfileEdit() {
               />
             </figure> */}
             <ProfileAvatar
-              avatarUrl={user.avatarUrl}
+              avatarUrl={avatarPreviewUrl}
             />
             <p className="text-[20px] leading-[27px] font-bold">
               <Link

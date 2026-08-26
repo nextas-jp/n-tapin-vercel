@@ -6,14 +6,18 @@ import { SecondaryButton } from "@/components/Buttons";
 import { Logo } from "@/components/Logo";
 import { useUser } from "../user-context";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import DutyStatusBadge from "@/components/DutyStatusBadge";
 
+/**
+ * //TODO: create a ProfileCard and a PhotoGrid Component (it should speed up overall rendering)
+ */
 
 export default function Dashboard() {
   const router = useRouter();
   const { user } = useUser();
   const { posts } = user;
 
-  console.log(posts);
+  // console.log(posts);
 
   function handleProfileChangeJump(event) {
     event.preventDefault();
@@ -70,8 +74,8 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <p>{user.name}</p>
-              <span>未出勤</span>
+              <p className="text-[20px] leading-[27px] font-bold">{user.name}</p>
+              <DutyStatusBadge status={user.status} />
             </div>
           </div>
           <SecondaryButton
