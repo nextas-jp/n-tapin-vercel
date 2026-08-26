@@ -129,7 +129,7 @@ export default function() {
         </li>
         <li>
           <Link
-            href="/dashboard"
+            href="/settings"
             onClick={undefined}
             className="relative flex w-[40px] flex-col items-center gap-[4px] text-center transition-transform duration-300 ease-out"
           >
@@ -139,7 +139,7 @@ export default function() {
                 <ellipse cx="11.871" cy="12.497" stroke="var(--foreground)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" rx="3.295" ry="3.222"/>
               </svg>
             </span>
-            <span className="text-[10px] leading-[14px] text-black">ホーム</span>
+            <span className="text-[10px] leading-[14px] text-black">設定</span>
           </Link>
         </li>
       </ul>

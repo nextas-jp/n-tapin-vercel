@@ -80,12 +80,35 @@ body {
   @apply shadow-card rounded-[15px] px-[19px] py-[24px];
 }
 
+.card-element-slim {
+  @apply shadow-card rounded-[15px] py-[22px];
+}
+
+
+.settings-list {
+  @apply flex flex-col divide-y;
+}
+
+.settings-item {
+  @apply relative flex w-full items-center justify-between px-[20px] font-semibold text-left text-[20px] leading-[27px] border-[#eeeeee];
+
+  &:not(:first-of-type) {
+    @apply pt-[16px];
+  }
+
+  &:not(:last-of-type) {
+    @apply pb-[16px];
+  }
+}
+
+
 
 /* ステート
 ******************************************/
 @utility off-duty-gradient {
   background-image: linear-gradient(15.73deg, #ea4444 20.84%, #ff7171 75.66%);
 }
+
 @utility on-duty-gradient {
   background-image: linear-gradient(15.73deg, #44ea49 20.84%, #71ff76 75.66%);
 }
