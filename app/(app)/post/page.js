@@ -23,7 +23,7 @@ export default function Post() {
       console.log(file);
       
       setPostFileLocal(file);
-      addPost(URL.createObjectURL(file));
+      
       setPreviewPostUrl(URL.createObjectURL(file));
     }
   }
@@ -35,6 +35,7 @@ export default function Post() {
   function savePost() {
     //TODO: save to supabase
     // addPost(postFile);
+    addPost(URL.createObjectURL(postFile));
   }
 
   return (
