@@ -17,7 +17,7 @@ export default function Dashboard() {
   const { user } = useUser();
   const { posts } = user;
 
-  // console.log(posts);
+  console.log(posts);
 
   function handleProfileChangeJump(event) {
     event.preventDefault();

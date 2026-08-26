@@ -30,8 +30,12 @@ export function UserProvider({ children }) {
   }, []);
 
   const addPost = useCallback((postPhotoUrl) => {
+    // setPosts((current) => [
+    //   { id: String(Date.now()), photoUrl: postPhotoUrl },
+    //   ...current,
+    // ]); //MEMO if an key is needed later
     setPosts((current) => [
-      { id: String(Date.now()), photoUrl: postPhotoUrl },
+      postPhotoUrl,
       ...current,
     ]);
   }, []);

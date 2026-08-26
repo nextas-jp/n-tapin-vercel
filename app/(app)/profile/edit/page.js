@@ -72,7 +72,7 @@ export default function ProfileEdit() {
             <p className="text-[20px] leading-[27px] font-bold">
               <Link
                 href=""
-                onClick={ openFilePicker }
+                onClick={openFilePicker}
               >写真を変更する</Link>
             </p>
         </div>
