@@ -1,6 +1,10 @@
 export default {
   name: "りな（rina）",
   status: "offDuty",
+  notifications: {
+    allRead: false,
+    items: []
+  },
   avatarUrl: "/uploads/8e529da2-e9f1-4815-825d-f42f855eadd2/profile_img.jpg",
   posts: [
     '/uploads/8e529da2-e9f1-4815-825d-f42f855eadd2/01.jpg',

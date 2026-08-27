@@ -1,8 +1,16 @@
 "use client";
 
+import { useEffect } from "react";  
 import { PageHeader } from "@/components/PageHeader";
+import { useUser } from "../user-context";
 
 export default function Notifications() {
+  const { setNotificationsAllRead } = useUser();
+
+  useEffect(() => {
+    setNotificationsAllRead(true);
+  }, []);
+
   return (
     <>
       <PageHeader

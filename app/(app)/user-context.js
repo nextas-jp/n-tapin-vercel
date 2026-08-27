@@ -16,8 +16,9 @@ export function UserProvider({ children }) {
   const [authUser, setAuthUser] = useState(null);
   // const [authLoading, setAuthLoading] = useState(true); // MEMO: Redo login implementation whith this??
 
-  const [name, setUsername] = useState(fakeUser.name);
   const [avatarUrl, setAvatarFile] = useObjectUrl(fakeUser.avatarUrl);
+  const [name, setUsername] = useState(fakeUser.name);
+  const [notificationsAllRead, setNotificationsAllRead] = useState(fakeUser.notifications.allRead);
   const [posts, setPosts] = useState(fakeUser.posts);
   const [status, setStatus] = useState(fakeUser.status);
   const [clockedInAt, setClockedInAt] = useState(null);
@@ -112,6 +113,7 @@ export function UserProvider({ children }) {
         user: {
           ...fakeUser,
           name,
+          notificationsAllRead,
           avatarUrl,
           posts,
           status,
@@ -119,6 +121,7 @@ export function UserProvider({ children }) {
           clockedOutAt,
         },
         setAvatarFile,
+        setNotificationsAllRead,
         setUsername,
         addPost,
         saveUserDataToDB,
