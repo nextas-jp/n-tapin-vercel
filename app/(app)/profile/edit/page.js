@@ -1,17 +1,17 @@
 "use client";
 
 // import { useRouter } from "next/navigation";
+// import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { useUser } from "../../user-context";
 import { TextField } from "@/components/TextField";
-// import Image from "next/image";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import Link from "next/link";
 
 export default function ProfileEdit() {
   const fileInputRef = useRef(null);
-  const { user, setUsername, setAvatarFile } = useUser();
+  const { user, setUsername, setAvatarFile, saveUserDataToDB } = useUser();
   const [avatarFile, setAvatarFileLocal] = useState(null);
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState(user.avatarUrl);
 
@@ -34,9 +34,10 @@ export default function ProfileEdit() {
       }
   }
 
-  function updateProfile() {
+  async function updateProfile() {
     if (avatarFile) setAvatarFile(avatarFile); // push to context only now
     // update supabase
+    saveUserDataToDB("username", user.name); // add a conditional statement to check if username has changed before saving (to save network resources...)
   }
 
   function revertUserState() {

@@ -2,7 +2,7 @@ import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ss
 import { REMEMBER_COOKIE, REMEMBER_MAX_AGE } from "@/constants";
 
 export function createBrowserClient({ remember } = {}) {
-  // Only write the preference cookie when explicitly told (i.e. at login time)
+  // MEMO: Only write the preference cookie when explicitly told (i.e. at login time)
   if (typeof remember === "boolean") {
     document.cookie = `${REMEMBER_COOKIE}=${remember}; path=/; max-age=${REMEMBER_MAX_AGE}; SameSite=Lax`;
   }
