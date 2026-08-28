@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useState, useEffect } from "react";
-import { useObjectUrl } from "@/hooks/use-object-url";
+// import { useObjectUrl } from "@/hooks/use-object-url";
 import { default as fakeUser } from "@/utils/dummydata/user";
 import { createBrowserClient } from "@/utils/supabase/client";
 
@@ -14,15 +14,16 @@ const supabase = createBrowserClient(); //MEMO: init Supabase
 // and photo that ホーム shows, 新規投稿 adds to its photo grid, and 出勤打刻 / 退勤打刻 set the work status. It all resets on reload until there is an API.
 export function UserProvider({ children }) {
   const [authUser, setAuthUser] = useState(null);
-  // const [authLoading, setAuthLoading] = useState(true); // MEMO: Redo login implementation whith this??
+  const [authLoading, setAuthLoading] = useState(true);
 
-  const [avatarUrl, setAvatarFile] = useObjectUrl(fakeUser.avatarUrl);
-  const [name, setUsername] = useState(fakeUser.name);
+  const [avatarUrl, setAvatarFile] = useState("");
+  const [name, setUsername] = useState("");
   const [notificationsAllRead, setNotificationsAllRead] = useState(fakeUser.notifications.allRead);
-  const [posts, setPosts] = useState(fakeUser.posts);
+  const [posts, setPosts] = useState([]);
   const [status, setStatus] = useState(fakeUser.status);
   const [clockedInAt, setClockedInAt] = useState(null);
   const [clockedOutAt, setClockedOutAt] = useState(null);
+  const [currentAttendanceId, setCurrentAttendanceId] = useState(null);
 
 
   // MEMO: keep the session/user in React state, reads from that state once instead of hitting the network each time
@@ -31,16 +32,63 @@ export function UserProvider({ children }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setAuthUser(session?.user ?? null);
-      // setAuthLoading(false);
-      // console.log(session?.user); // DEBUG
 
-      //FIXME SET CORRECT username from Supabase but VERY EXPIREMTAL
-      const response = await readUserDataFromDB("username", session?.user.id);
-      if (response.data) setUsername(response.data[0].username);
+      if (session?.user?.id) {
+        // 1. プロフィール情報（名前・アバター画像）の取得
+        const response = await supabase
+          .from("users")
+          .select("username, avatar_url")
+          .eq("id", session.user.id);
+
+        if (response.data && response.data.length > 0) {
+          setUsername(response.data[0].username);
+          
+          if (response.data[0].avatar_url) {
+            setAvatarFile(response.data[0].avatar_url);
+          }
+        }
+
+        // 2. 投稿画像（posts）の取得（新しい順に並べる）
+        const { data: postsData } = await supabase
+          .from("posts")
+          .select("image_url")
+          .eq("user_id", session.user.id)
+          .order("created_at", { ascending: false });
+
+        if (postsData && postsData.length > 0) {
+          // [{ image_url: "https..." }, ...] という形から ["https...", ...] という配列に変換
+          const imageUrls = postsData.map(post => post.image_url);
+          setPosts(imageUrls);
+        } else {
+          setPosts([]); // 投稿がない場合は空にする
+        }
+
+        // 3. 最新の勤怠状況を取得（退勤していない記録があるか探す）
+        const { data: attendanceData } = await supabase
+          .from("attendances")
+          .select("id, clock_in_at, clock_out_at")
+          .eq("user_id", session.user.id)
+          .order("clock_in_at", { ascending: false })
+          .limit(1);
+
+        if (attendanceData && attendanceData.length > 0) {
+          const latest = attendanceData[0];
+          // clock_out_at が NULL なら「勤務中」
+          if (!latest.clock_out_at) {
+            setStatus("onDuty");
+            setClockedInAt(new Date(latest.clock_in_at));
+            setCurrentAttendanceId(latest.id);
+          } else {
+            // 退勤済みなら「未出勤」
+            setStatus("offDuty");
+            setClockedOutAt(new Date(latest.clock_out_at));
+          }
+        }
+      }
+
+      // 4. データの確認・取得が終わったらローディング状態を解除する
+      setAuthLoading(false);
     });
-
-
-    
 
     return () => subscription.unsubscribe();
   }, []);
@@ -53,7 +101,7 @@ export function UserProvider({ children }) {
     //   // window.location = '/'; // Full redirect/reload to safely logout
     //   // return;
     // }
-    
+
     const value = await supabase
       .from("users")
       .select(key)
@@ -62,9 +110,9 @@ export function UserProvider({ children }) {
     return value;
   }, [authUser]);
 
-  
+
   const saveUserDataToDB = useCallback(async (key, value) => {
-     if (!authUser) {
+    if (!authUser) {
       console.log("No authenticated user — please sign in again");
       supabase.auth.signOut(); // Force a Supabase signout
       window.location = '/'; // Full redirect/reload to safely logout
@@ -85,16 +133,48 @@ export function UserProvider({ children }) {
 
 
 
-  const clockIn = useCallback(time => {
-    setStatus("onDuty");
-    setClockedInAt(time);
-    setClockedOutAt(null);
-  }, []);
+  const clockIn = useCallback(async (time) => {
+    if (!authUser) return;
+    
+    // DBに出勤記録を新しく作る
+    const { data, error } = await supabase
+      .from("attendances")
+      .insert({
+        user_id: authUser.id,
+        clock_in_at: time.toISOString(), // データベース用の時刻フォーマット
+      })
+      .select("id")
+      .single(); // 作成した行のIDを返してもらう
 
-  const clockOut = useCallback(time => {
-    setStatus("offDuty");
-    setClockedOutAt(time);
-  }, []);
+    if (!error && data) {
+      setCurrentAttendanceId(data.id); // IDを記憶しておく
+      setStatus("onDuty");
+      setClockedInAt(time);
+      setClockedOutAt(null);
+    } else {
+      alert("出勤の打刻に失敗しました。");
+    }
+  }, [authUser]);
+
+  const clockOut = useCallback(async (time) => {
+    if (!authUser || !currentAttendanceId) return;
+
+    // 出勤時に作った行の clock_out_at を更新する
+    const { error } = await supabase
+      .from("attendances")
+      .update({
+        clock_out_at: time.toISOString(),
+      })
+      .eq("id", currentAttendanceId);
+
+    if (!error) {
+      setStatus("offDuty");
+      setClockedOutAt(time);
+      setCurrentAttendanceId(null); // IDをリセット
+    } else {
+      alert("退勤の打刻に失敗しました。");
+    }
+  }, [authUser, currentAttendanceId]);
 
   const addPost = useCallback(postPhotoUrl => {
     // setPosts((current) => [

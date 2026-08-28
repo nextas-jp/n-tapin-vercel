@@ -1,27 +1,29 @@
 "use client";
 
-/* //MEMO:
-  現状、Signupの確認画面までいったら、次へのボタンを押すと、ログイン中の状態ではないので、
-  ログイン画面にリダイレクトされます。
-  confirm画面内に、セーフなログイン処理を加えるか、signup画面の段階でSupabaseへのuser登録と一緒にいれるか？？
-*/
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
+import { useSignup } from "./signup-context"; // Contextをインポート
 
 export default function Signup() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // Contextから取得するように変更
+  const { email, setEmail, password, setPassword } = useSignup();
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   function handleSubmit(event) {
-    //TODO: Add signup logic (supabase?)
     event.preventDefault();
+    
+    // パスワードの一致チェック
+    if (password !== passwordConfirm) {
+      alert("パスワードが一致しません。");
+      return;
+    }
+    
+    // ここではまだ登録せず、次の画面へ進むだけ
     router.push("/signup/name");
   }
 
@@ -35,6 +37,7 @@ export default function Signup() {
 
       <section className="relative">
         <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
+          {/* TextField等は元のままでOKです（valueとonChangeがContextに繋がります） */}
           <div className="card-element">
             <TextField
               id="email"
