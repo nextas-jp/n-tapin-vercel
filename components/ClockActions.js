@@ -57,10 +57,10 @@ export default function ClockActions({
           type="button"
           onClick={ e => onGoHome(e) }
         >ホームへ戻る</SecondaryButton>
-        <SecondaryButton
+        {/* <SecondaryButton
           type="button"
           onClick={handleCameraClick} //TODO: camera test (if still needed?)
-        >写真を撮る</SecondaryButton>
+        >写真を撮る</SecondaryButton> */}
       </>
     );
   }
