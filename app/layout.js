@@ -18,6 +18,7 @@ const inter = Inter({
 export const metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }) {
