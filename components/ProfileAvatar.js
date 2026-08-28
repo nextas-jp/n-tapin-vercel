@@ -5,6 +5,7 @@ export default function({ avatarUrl, size = 140 }) {
     return (
       <Image
         src={avatarUrl}
+        preload={true}
         alt="プロフィール写真"
         width={size}
         height={size}
