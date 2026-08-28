@@ -82,8 +82,8 @@ export default function Dashboard() {
             </div>
           </div>
           <SecondaryButton
+            isThin={true}
             onClick={ e => handleProfileChangeJump(e) }
-            isthin={true}
           >プロフィールを編集</SecondaryButton>
         </div>
 

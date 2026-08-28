@@ -113,12 +113,30 @@ body {
   background-image: linear-gradient(15.73deg, #44ea49 20.84%, #71ff76 75.66%);
 }
 
-.offduty-state {
+.status-badge-offduty {
   @apply off-duty-gradient text-shadow-[0_0_4px_#ea4343];
 }
 
-.onduty-state {
-  @apply off-duty-gradient text-shadow-[0_0_4px_#009405];
+.status-badge-onduty {
+  @apply on-duty-gradient text-shadow-[0_0_4px_#009405];
+}
+
+.border-onduty {
+  border: 1px solid #00ff26;
+  border-radius: 15px;
+}
+
+.border-offduty {
+  border: 1px solid #ea4444;
+  border-radius: 15px;
+}
+
+.text-onduty {
+  @apply on-duty-gradient;
+}
+
+.text-offduty {
+  @apply off-duty-gradient;
 }
 
 

@@ -4,8 +4,8 @@ export const dutyStatusLabels = {
 };
 
 const statusClassNames = {
-  offDuty: "offduty-state",
-  onDuty: "onduty-state"
+  offDuty: "status-badge-offduty",
+  onDuty: "status-badge-onduty"
 }
 
 export default function({ status }) {

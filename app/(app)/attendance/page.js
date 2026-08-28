@@ -1,33 +1,42 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { dutyStatusLabels } from "@/components/DutyStatusBadge";
 import { useCurrentMinute } from "@/hooks/use-realtime";
+import { formatDate, formatTime } from "@/utils/misc/format";
 import { useUser } from "../user-context";
-
-function formatDate(date) {
-  if (!date) {
-    return "----年--月--日";
-  }
-
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${date.getFullYear()}年${month}月${day}日`;
-}
-
-function formatTime(date) {
-  if (!date) {
-    return "-- : --";
-  }
-
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours} : ${minutes}`;
-}
+import ClockActions from "@/components/ClockActions";
 
 export default function Attendance() {
+  const router = useRouter();
   const now = useCurrentMinute();
   const { user, clockIn, clockOut, addPost } = useUser();
+  const [justClockedIn, setJustClockedIn] = useState(false);
+  const [justClockedOut, setJustClockedOut] = useState(false);
+
+  const onDuty = user.status === "onDuty";
+
+  function handleGoHome(event) {
+    event.preventDefault();
+    
+    router.push('/dashboard');
+  }
+
+  function handleSkip() {
+
+  }
+
+  function handleClockIn() {
+    clockIn(new Date());
+    setJustClockedIn(true);
+  }
+
+  function handleClockOut() {
+    clockOut(new Date());
+    setJustClockedOut(true);
+  }
 
   return (
     <>
@@ -46,6 +55,22 @@ export default function Attendance() {
             <p className="text-[20px] leading-[27px] font-semibold">
               {dutyStatusLabels[user.status]}
             </p>
+
+
+            <div className="relative flex flex-col gap-[10px] w-full">
+              <ClockActions
+                onDuty={onDuty}
+                justClockedIn={justClockedIn}
+                justClockedOut={justClockedOut}
+                clockedInAt={user.clockedInAt}
+                clockedOutAt={user.clockedOutAt}
+                onClockIn={handleClockIn}
+                onClockOut={handleClockOut}
+                onSkip={handleSkip}
+                onGoHome={handleGoHome}
+              />
+            </div>
+
           </div>
         </div>
       </section>
