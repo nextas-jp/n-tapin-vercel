@@ -19,6 +19,10 @@ export const metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192x192.png",
+    apple: "/icon-192x192.png",
+  },
 };
 
 export default function RootLayout({ children }) {
