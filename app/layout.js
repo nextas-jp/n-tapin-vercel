@@ -20,8 +20,8 @@ export const metadata = {
   description: siteConfig.description,
   manifest: "/manifest.json",
   icons: {
-    icon: "/icon-192x192.png",
-    apple: "/icon-192x192.png",
+    icon: "/favicon-192.png",
+    apple: "/favicon-192.png",
   },
 };
 
