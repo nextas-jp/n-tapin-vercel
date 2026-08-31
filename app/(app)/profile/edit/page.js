@@ -107,10 +107,11 @@ export default function ProfileEdit() {
             avatarUrl={avatarPreviewUrl}
           />
           <p className="text-[20px] leading-[27px] font-bold">
-            <Link
-              href=""
+            <button
+              type="button"
               onClick={openFilePicker}
-            >写真を変更する</Link>
+              className="underline"
+            >写真を変更する</button>
           </p>
         </div>
 
