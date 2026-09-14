@@ -10,7 +10,17 @@ export function formatDate(date) {
 
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  return `${date.getFullYear()}年${month}月${day}日`;
+
+  return (
+    <>
+      {date.getFullYear()}
+      <span className="text-[16px]">年</span>
+      {month}
+      <span className="text-[16px]">月</span>
+      {day}
+      <span className="text-[16px]">日</span>
+    </>
+  );
 }
 
 /**

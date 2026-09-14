@@ -46,17 +46,15 @@ export default function Attendance() {
       />
 
       <section className="relative">
-        <div className="card-element flex flex-col gap-[32px]">
-          <div className="flex flex-col items-center gap-[8px]">
-            <div className="flex flex-col items-center">
-              <p className="text-[18px] leading-[24px]">{formatDate(now)}</p>
-              <p className="text-[56px] leading-[77px] font-bold">{formatTime(now)}</p>
+        <div className="card-element flex flex-col">
+          <div className="flex flex-col items-center gap-[32px]">
+            <div className="flex flex-col items-center gap-[8px]">
+              <p className="text-[20px] leading-[24px] font-bold">{formatDate(now)}</p>
+              <p className="text-[56px] leading-[50px] font-bold">{formatTime(now)}</p>
             </div>
-            <p className="text-[20px] leading-[27px] font-semibold">
+            <p className="text-[20px] leading-[27px] font-semibold text-[#d9d9d9]">
               {dutyStatusLabels[user.status]}
             </p>
-
-
             <div className="relative flex flex-col gap-[10px] w-full">
               <ClockActions
                 onDuty={onDuty}
