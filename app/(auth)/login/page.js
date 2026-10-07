@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { TextField } from "@/components/TextField";
 import { PrimaryButton } from "@/components/Buttons";
 import { PageHeader } from "@/components/PageHeader";
 
@@ -11,31 +8,31 @@ import { createBrowserClient } from "@/utils/supabase/client";
 
 export default function Login() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [autoLogin, setAutoLogin] = useState(false);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
+  async function handleSSOLogin() {
     try {
-      const supabase = createBrowserClient({ remember: autoLogin });
+      // 既存のセッション設定を引き継いでクライアントを作成
+      const supabase = createBrowserClient();
 
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'custom:nextas-id',
+        options: {
+          // window.location.originを使うことで、ローカル(3001)でも本番環境でも自動でURLが合います
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
-      if (signInError) {
-        console.log(signInError);
-        
-        alert('メールアドレスまたはパスワードが正しくありません。');
+      if (error) {
+        console.error("OAuth SignIn Error:", error);
+        alert('認証ハブへの接続に失敗しました。');
         return;
       }
+      
+      // ※signInWithOAuth成功時は自動的にハブ側へリダイレクトされるため、router.pushは不要です
 
-      router.push("/dashboard");
-    } catch {
-      alert('ログインに失敗しました。しばらくしてからもう一度お試しください。');
+    } catch (err) {
+      console.error(err);
+      alert('エラーが発生しました。しばらくしてからもう一度お試しください。');
     }
   }
 
@@ -43,59 +40,18 @@ export default function Login() {
     <>
       <PageHeader
         title="ログイン"
-        description="メールアドレスとパスワードを入力してください。"
+        description="統合アカウント（NEXTAS ID）を使用してログインしてください。"
       />
       
       <section className="relative">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
-          <div className="card-element">
-            <TextField
-              id="email"
-              name="email"
-              label="メールアドレス"
-              type="email"
-              autoComplete="username"
-              placeholder="メールアドレスを入力してください"
-              required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </div>
+        <div className="flex flex-col gap-[24px]">
           <div className="card-element flex flex-col gap-[8px]">
-            <TextField
-              id="password"
-              name="password"
-              label="パスワード"
-              type="password"
-              autoComplete="current-password"
-              placeholder="パスワードを入力してください"
-              required
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <div className="flex items-center gap-[10px]">
-              <input
-                id="autoLogin"
-                name="autoLogin"
-                type="checkbox"
-                checked={autoLogin}
-                onChange={(event) => setAutoLogin(event.target.checked)}
-                // className="size-[20px] appearance-none rounded-[3px] bg-field checked:bg-primary-gradient"
-                className="size-[20px] rounded-[3px] bg-field"
-              />
-              <label
-                htmlFor="autoLogin"
-                className="text-[16px] leading-[22px] select-none"
-              >次回から自動ログイン</label>
+            {/* formタグを外し、ボタンクリックで直接OIDC関数を呼び出します */}
+            <div onClick={handleSSOLogin}>
+              <PrimaryButton>NEXTAS IDでログイン</PrimaryButton>
             </div>
           </div>
-          <div className="card-element flex flex-col gap-[8px]">
-            <PrimaryButton>ログイン</PrimaryButton>
-            <p className="text-center text-[16px] leading-[22px]">
-              <Link href="/signup">アカウントをお持ちでない方は<span className="underline">こちら</span></Link>
-            </p>
-          </div>
-        </form>
+        </div>
       </section>
     </>
   );
