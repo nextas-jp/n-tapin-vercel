@@ -40,7 +40,7 @@ export default function Settings() {
                   type="checkbox"
                   checked={notificationsEnabled}
                   onChange={(e) => setNotificationsEnabled(e.target.checked)}
-                  className="peer appearance-none w-9 h-6 bg-slate-100 rounded-full checked:bg-green-500 cursor-pointer transition-colors duration-300" />
+                  className="peer appearance-none w-9 h-6 bg-[#d9d9d9] rounded-full checked:bg-green-500 cursor-pointer transition-colors duration-300" />
                 <label htmlFor="switch-component-blue" className="absolute top-0 left-0 w-6 h-6 bg-white rounded-full border border-slate-300 shadow-sm transition-transform duration-300 peer-checked:translate-x-4 peer-checked:border-green-500 cursor-pointer">
                 </label>
               </div>
@@ -66,11 +66,12 @@ export default function Settings() {
             ${isModalOpen ? "opacity-100" : "pointer-events-none opacity-0"}
           `}
         >
-          <div className="card-element-slim w-full mx-[20px] pt-[22px] !pb-[0] bg-white">
+          <div className="card-element-slim w-full max-w-[430px] mx-[20px] pt-[22px] !pb-[0] bg-white">
             <h2 className="pb-[22px] text-center font-bold text-[20px] leading-[27px]">ログアウトしますか？</h2>
             <div className="grid grid-cols-2 border-t border-[#eeeeee] divide-x">
               <div className="flex flex-col py-[16px] justify-center border-[#eeeeee]">
                 <button
+                  className="font-semibold text-[#a1a1a1]"
                   onClick={() => setModalIsOpen(false)}
                 >キャンセル</button>
               </div>

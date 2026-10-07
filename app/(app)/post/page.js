@@ -119,7 +119,7 @@ export default function Post() {
             <button
               type="button"
               onClick={openFilePicker}
-              className="underline"
+              className="underline underline-offset-5"
             >写真を投稿する</button>
           </p>
         </div>

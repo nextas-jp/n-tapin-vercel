@@ -92,7 +92,7 @@ export default function ProfileEdit() {
       </PageHeader>
 
       <section className="relative">
-        <div className="card-element flex flex-col items-center gap-[16px]">
+        <div className="card-element flex flex-col items-center gap-[16px] mb-[24px]">
           {/* <figure>
               <Image
                 src={user.avatarUrl}
@@ -110,7 +110,7 @@ export default function ProfileEdit() {
             <button
               type="button"
               onClick={openFilePicker}
-              className="underline"
+              className="underline underline-offset-5"
             >写真を変更する</button>
           </p>
         </div>
