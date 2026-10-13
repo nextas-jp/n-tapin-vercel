@@ -15,7 +15,7 @@ export default function Login() {
       const supabase = createBrowserClient();
 
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'custom:nextas-id',
+        provider: 'custom:nextas-id-2',
         options: {
           // window.location.originを使うことで、ローカル(3001)でも本番環境でも自動でURLが合います
           redirectTo: `${window.location.origin}/auth/callback`,
