@@ -29,11 +29,13 @@ export default function Dashboard() {
       const supabase = createBrowserClient();
       // test_notesテーブルから全件取得しようと試みる
       const { data, error } = await supabase.from('rls_test').select('*');
+      console.log(data);
       
       if (error) {
         console.error("データの取得に失敗しました:", error);
       } else {
         setNotes(data || []);
+        
       }
     }
     fetchNotes();
