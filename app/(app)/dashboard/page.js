@@ -141,7 +141,7 @@ export default function Dashboard() {
             <ul className="flex flex-col gap-[8px]">
               {notes.map(note => (
                 <li key={note.id} className="p-[12px] bg-surface rounded-[5px] shadow-sm text-[14px]">
-                  {note.content}
+                  {note.note}
                 </li>
               ))}
             </ul>
