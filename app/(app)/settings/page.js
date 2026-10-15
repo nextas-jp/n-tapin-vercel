@@ -15,10 +15,23 @@ export default function Settings() {
 
     if (signOutError) {
       console.log(signOutError);
-        
       alert('ログアウトが失敗しました。もう一度試してください。');
     } else {
-      window.location = '/'; // Full redirect/reload to safely logout
+      // ▼▼▼ ここからSLO対応のために変更 ▼▼▼
+
+      // 1. Hubでのログアウト完了後に戻ってきてほしいTapInのURLを設定
+      const returnUrl = encodeURIComponent(window.location.origin + '/');
+      
+      // 2. 環境変数からHubのベースURLを取得（設定されていない場合はlocalhostをフォールバックとして使用）
+      const hubBaseUrl = process.env.NEXT_PUBLIC_SUPABASE_HUB_URL || 'http://localhost:3001';
+      
+      // 3. Hubのログアウト中継ページURLを指定
+      const hubLogoutUrl = `${hubBaseUrl}/logout?return_to=${returnUrl}`;
+      
+      // 4. Hubへリダイレクト
+      window.location.href = hubLogoutUrl;
+
+      // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
     }
   }
 
