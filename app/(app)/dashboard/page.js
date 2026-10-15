@@ -20,7 +20,7 @@ export default function Dashboard() {
 
 
   // ▼▼▼ 追記: RLSテスト用の状態管理とデータ取得 ▼▼▼
-  const [notes, setNotes] = useState<any[]>([]);
+  const [notes, setNotes] = useState<any>([]);
 
   useEffect(() => {
     async function fetchNotes() {
