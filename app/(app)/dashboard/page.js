@@ -9,6 +9,7 @@ import { Logo } from "@/components/Logo";
 import { useUser } from "../user-context";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import DutyStatusBadge from "@/components/DutyStatusBadge";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 /**
  * //TODO: create a ProfileCard and a PhotoGrid Component (it should speed up overall rendering)
