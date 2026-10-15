@@ -18,6 +18,26 @@ export default function Dashboard() {
   const { user } = useUser();
   const { posts } = user;
 
+
+  // ▼▼▼ 追記: RLSテスト用の状態管理とデータ取得 ▼▼▼
+  const [notes, setNotes] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchNotes() {
+      const supabase = createBrowserClient();
+      // test_notesテーブルから全件取得しようと試みる
+      const { data, error } = await supabase.from('rls_test').select('*');
+      
+      if (error) {
+        console.error("データの取得に失敗しました:", error);
+      } else {
+        setNotes(data || []);
+      }
+    }
+    fetchNotes();
+  }, []);
+  // ▲▲▲ ここまで ▲▲▲
+
   // console.log(posts);
   
 
@@ -109,6 +129,23 @@ export default function Dashboard() {
             {/* <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li> */}
           </ul>
         </div>
+
+        {/* ▼▼▼ 追記: RLSテスト結果の表示エリア ▼▼▼ */}
+        <div className="mt-[40px] p-[16px] bg-field rounded-[10px]">
+          <h2 className="text-[18px] font-bold mb-[8px]">RLSテスト結果（test_notes）</h2>
+          {notes.length === 0 ? (
+            <p className="text-[14px] text-caption">データを取得中、またはデータがありません...</p>
+          ) : (
+            <ul className="flex flex-col gap-[8px]">
+              {notes.map(note => (
+                <li key={note.id} className="p-[12px] bg-surface rounded-[5px] shadow-sm text-[14px]">
+                  {note.content}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {/* ▲▲▲ ここまで ▲▲▲ */}
       </section>
     </>
   );
