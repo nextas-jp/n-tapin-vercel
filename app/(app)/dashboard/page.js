@@ -29,6 +29,7 @@ export default function Dashboard() {
       const supabase = createBrowserClient();
       const { data: { user } } = await supabase.auth.getUser();
       console.log("【確認用】現在のTapIn UID:", user?.id);
+      console.log("【確認用】裏側の連携帳簿 (auth.identities):", user?.identities);
       // test_notesテーブルから全件取得しようと試みる
       const { data, error } = await supabase.from('rls_test').select('*');
       console.log(data);
