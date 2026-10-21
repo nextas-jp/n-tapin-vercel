@@ -5,7 +5,10 @@ import { REMEMBER_COOKIE, REMEMBER_MAX_AGE } from "@/constants";
 const PROTECTED_PATHS = ["/dashboard", "/attendance", "/notifications", "/posts", "/settings"];
 
 export async function middleware(request) {
-  console.log("🚀 ミドルウェア作動チェック！ アクセス先:", request.nextUrl.pathname);
+  console.log("🔍 アクセスURL:", pathname);
+  console.log("🔍 保護対象判定:", isProtected);
+  console.log("🔍 ユーザー情報:", user ? "存在します(Banされてない)" : "nullです");
+  console.log("🔍 エラー内容:", error ? error.message : "エラーなし");
   let response = NextResponse.next({ request });
 
   const isRemembered = request.cookies.get(REMEMBER_COOKIE)?.value !== "false";
@@ -40,6 +43,7 @@ export async function middleware(request) {
   const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
 
   if (isProtected && !user) {
+    console.log("🚪 リダイレクト発動！！");
     // ▼▼▼ 変更箇所：TapInの/loginではなく、Hubのログイン画面へ強制送還する ▼▼▼
     const hubLoginUrl = process.env.NEXT_PUBLIC_SUPABASE_HUB_URL 
       ? `${process.env.NEXT_PUBLIC_SUPABASE_HUB_URL}/login` 
