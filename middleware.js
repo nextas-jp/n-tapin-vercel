@@ -39,10 +39,8 @@ export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
   const isProtected = PROTECTED_PATHS.some((path) => pathname.startsWith(path));
 
-    console.log("🔍 アクセスURL:", pathname);
+  console.log("🔍 アクセスURL:", pathname);
   console.log("🔍 保護対象判定:", isProtected);
-  console.log("🔍 ユーザー情報:", user ? "存在します(Banされてない)" : "nullです");
-  console.log("🔍 エラー内容:", error ? error.message : "エラーなし");
 
   if (isProtected && !user) {
     console.log("🚪 リダイレクト発動！！");
