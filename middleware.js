@@ -5,6 +5,7 @@ import { REMEMBER_COOKIE, REMEMBER_MAX_AGE } from "@/constants";
 const PROTECTED_PATHS = ["/dashboard", "/attendance", "/notifications", "/posts", "/settings"];
 
 export async function middleware(request) {
+  console.log("🚀 ミドルウェア作動チェック！ アクセス先:", request.nextUrl.pathname);
   let response = NextResponse.next({ request });
 
   const isRemembered = request.cookies.get(REMEMBER_COOKIE)?.value !== "false";
