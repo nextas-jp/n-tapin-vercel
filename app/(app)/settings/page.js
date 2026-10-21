@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // 👈 useEffect を追加
 import { PageHeader } from "@/components/PageHeader";
 
 import { createBrowserClient } from "@/utils/supabase/client";
@@ -8,6 +8,40 @@ import { createBrowserClient } from "@/utils/supabase/client";
 export default function Settings() {
   const [notificationsEnabled, setNotificationsEnabled] = useState("checked");
   const [isModalOpen, setModalIsOpen] = useState(false);
+
+  // ▼▼▼ ここから追加：Hubからの「道連れログアウト指示」を裏で受信する透明な処理 ▼▼▼
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get("action");
+    const returnTo = params.get("return_to");
+
+    // URLに ?action=logout が付いていたら、画面を描画する裏側で即座にお掃除を実行する
+    if (action === "logout" && returnTo) {
+      const performSilentLogout = async () => {
+        try {
+          // 1. TapInの鍵（ローカルストレージ）を強制破壊
+          Object.keys(window.localStorage).forEach((key) => {
+            if (key.startsWith('sb-')) window.localStorage.removeItem(key);
+          });
+          window.sessionStorage.clear();
+        } catch (e) {
+          console.error("Storage clear error", e);
+        }
+
+        // 2. 念のためTapInのサーバーへもログアウト通知
+        const supabase = createBrowserClient();
+        await supabase.auth.signOut().catch(() => {});
+
+        // 3. 破壊が終わったら即座にHubのログイン画面（return_to）へ送り返す
+        window.location.href = returnTo;
+      };
+
+      performSilentLogout();
+    }
+  }, []);
+  // ▲▲▲ 追加ここまで ▲▲▲
 
   async function logout() {
     const supabase = createBrowserClient();
