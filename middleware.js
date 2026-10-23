@@ -2,7 +2,7 @@ import { createServerClient as createSupabaseServerClient } from "@supabase/ssr"
 import { NextResponse } from "next/server";
 import { REMEMBER_COOKIE, REMEMBER_MAX_AGE } from "@/constants";
 
-const PROTECTED_PATHS = ["/dashboard", "/attendance", "/notifications", "/posts", "/settings"];
+const PROTECTED_PATHS = ["/dashboard", "/attendance", "/notifications", "/posts", "/settings", "/queue-test"];
 
 export async function middleware(request) {
 
