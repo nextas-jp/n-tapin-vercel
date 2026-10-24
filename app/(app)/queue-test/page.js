@@ -38,11 +38,14 @@ export default function QueuesTest() {
     
     // 順序性のテスト：連続で5件送信する
     for (let i = 1; i <= 5; i++) {
-      await supabase.schema('pgmq_public').rpc('send', {
+      const sendResult = await supabase.schema('pgmq_public').rpc('send', {
         queue_name: 'foo',
         message: { expected_order: i, text: `退会イベント ${i}` },
         sleep_seconds: 0, 
       });
+      
+      // 送信結果（発行された msg_id など）をコンソールに出力
+      console.log(`📤 送信 ${i}件目 完了:`, sendResult);
     }
     const sendEndTime = performance.now();
     console.log(`✅ 送信完了（5件の書き込みにかかった合計時間: ${Math.round(sendEndTime - sendStartTime)}ms）`);
