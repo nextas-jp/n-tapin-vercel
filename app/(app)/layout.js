@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server'; 
+import { createBrowserClient } from '@/utils/supabase/client'; 
 
 import { ViewTransition } from 'react';
 import { UserProvider } from "./user-context";
@@ -7,7 +7,7 @@ import BottomNav from "@/components/BottomNav";
 
 // ▼ async を追加してサーバーでのデータ取得を可能にする
 export default async function AppLayout({ children }) {
-  const supabase = await createClient();
+  const supabase = await createBrowserClient();
   
   // 1. ログイン状態の確認
   const { data: { user }, error: authError } = await supabase.auth.getUser();
