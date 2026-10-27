@@ -42,8 +42,9 @@ export async function middleware(request) {
   console.log("🔍 アクセスURL:", pathname);
   console.log("🔍 保護対象判定:", isProtected);
 
-  if (isProtected && !user) {
+  if (isProtected && (!user || error)) {
     console.log("🚪 リダイレクト発動！！");
+    await supabase.auth.signOut();
     // ▼▼▼ 変更箇所：TapInの/loginではなく、Hubのログイン画面へ強制送還する ▼▼▼
     const hubLoginUrl = process.env.NEXT_PUBLIC_SUPABASE_HUB_URL 
       ? `${process.env.NEXT_PUBLIC_SUPABASE_HUB_URL}/login` 
