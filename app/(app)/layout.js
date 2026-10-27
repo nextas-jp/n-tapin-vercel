@@ -1,13 +1,14 @@
 import { redirect } from 'next/navigation';
-import { createBrowserClient } from '@/utils/supabase/client'; 
+import { createServerClient } from '@/utils/supabase/server'; 
+// ▼ 追加: システム権限用のクライアントを作成するためにインポート
+import { createClient as createAdminClient } from '@supabase/supabase-js';
 
 import { ViewTransition } from 'react';
 import { UserProvider } from "./user-context";
 import BottomNav from "@/components/BottomNav";
 
-// ▼ async を追加してサーバーでのデータ取得を可能にする
 export default async function AppLayout({ children }) {
-  const supabase = await createBrowserClient();
+  const supabase = createServerClient(); 
   
   // 1. ログイン状態の確認
   const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -16,16 +17,23 @@ export default async function AppLayout({ children }) {
     redirect('/login');
   }
 
-  // 2. 退会済み（is_deleted）のチェック
-  const { data: userData } = await supabase
+  // ▼▼▼ 修正: RLSをバイパスして確実に状態をチェックするため、システム権限を使用 ▼▼▼
+  const supabaseAdmin = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  const { data: userData } = await supabaseAdmin
     .from('users')
     .select('is_deleted')
     .eq('id', user.id)
     .single();
 
+  // 退会済みなら退出ページへ強制リダイレクト
   if (userData?.is_deleted) {
-    redirect('/deactivated'); // 退会済みなら退出ページへ強制リダイレクト
+    redirect('/deactivated');
   }
+  // ▲▲▲ 修正ここまで ▲▲▲
 
   // 3. 正常なユーザーのみ既存のUIを描画
   return (
