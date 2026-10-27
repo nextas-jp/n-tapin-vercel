@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { createBrowserClient } from '@/utils/supabase/client'
 
 export default function DeactivatedPage() {
   useEffect(() => {
-    const performForceCleanup = async () => {
-      // 1. クライアント側のストレージを強制破壊
+    const performForceCleanup = () => {
+      // 1. クライアント側のストレージを強制破壊して実質的なログアウト状態にする
       if (typeof window !== 'undefined') {
         Object.keys(window.localStorage).forEach((key) => {
           if (key.startsWith('sb-')) window.localStorage.removeItem(key);
@@ -14,13 +13,10 @@ export default function DeactivatedPage() {
         window.sessionStorage.clear();
       }
 
-      // 2. TapInのAuthからサインアウト
-      const supabase = createBrowserClient();
-      await supabase.auth.signOut().catch(() => {});
-
-      // 3. 3秒後にHubのログアウト画面へ強制送還（Hub側のセッションも切る）
+      // 2. 3秒後にHubのログアウト画面へ強制送還（Hub側のセッションを確実に切る）
       setTimeout(() => {
-        const returnUrl = encodeURIComponent(window.location.origin + '/');
+        // 戻り先はTapInのログイン画面を指定
+        const returnUrl = encodeURIComponent(window.location.origin + '/login');
         const hubBaseUrl = process.env.NEXT_PUBLIC_SUPABASE_HUB_URL || 'http://localhost:3001';
         window.location.href = `${hubBaseUrl}/logout?return_to=${returnUrl}`;
       }, 3000);
