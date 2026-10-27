@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { createServerClient } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/server';
 
 export default function DeactivatedPage() {
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function DeactivatedPage() {
       }
 
       // 2. TapInのAuthからサインアウト
-      const supabase = createServerClient();
+      const supabase = createClient();
       await supabase.auth.signOut().catch(() => {});
 
       // 3. 3秒後にHubのログアウト画面へ強制送還（Hub側のセッションも切る）
