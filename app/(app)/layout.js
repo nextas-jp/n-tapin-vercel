@@ -8,7 +8,7 @@ import { UserProvider } from "./user-context";
 import BottomNav from "@/components/BottomNav";
 
 export default async function AppLayout({ children }) {
-  const supabase = createServerClient(); 
+  const supabase = await createServerClient(); 
   
   // 1. ログイン状態の確認
   const { data: { user }, error: authError } = await supabase.auth.getUser();
