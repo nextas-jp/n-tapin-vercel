@@ -46,14 +46,7 @@ export async function deleteUserFromTapIn(userId) {
       });
 
     if (auditError) throw auditError;
-
-    // 4. TapInのAuthenticationからユーザーを物理削除（二度とログイン不可にする）
-    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
-    if (authError) {
-      console.error(`Auth削除エラー (UserID: ${userId}):`, authError);
-      // Authの削除に失敗しても、DBの論理削除とログ記録は完了しているため進行
-    }
-
+    
     return { success: true, message: '退会処理および監査ログの記録が完了しました' };
 
   } catch (error) {

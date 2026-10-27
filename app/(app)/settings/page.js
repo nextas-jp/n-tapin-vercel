@@ -133,7 +133,7 @@ export default function Settings() {
               </button>
             </li>
             
-            <li className="settings-item border-t border-gray-100 mt-2 pt-4">
+            <li className="settings-item border-t border-gray-100 pt-4">
               <button
                 className="relative w-full text-left"
                 onClick={() => setWithdrawModalOpen(true)}
