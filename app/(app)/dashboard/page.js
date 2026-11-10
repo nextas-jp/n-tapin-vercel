@@ -17,7 +17,7 @@ import { createBrowserClient } from "@/utils/supabase/client";
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, authLoading } = useUser();
   const { posts } = user;
 
 
@@ -89,25 +89,28 @@ export default function Dashboard() {
 
       <section className="relative">
         <div className="card-element">
-          <div className="flex items-center gap-[16px] mb-[16px]">
-            <div className="relative">
-              {/* <Image
-                src={user.avatarUrl}
-                width={100}
-                height={100}
-                alt={`${user.name}のプロフィル画像`}
-                className="shrink-0 rounded-full object-cover"
-              /> */}
-              <ProfileAvatar
-                avatarUrl={user.avatarUrl}
-                size={100}
-              />
+          {authLoading ? (
+            <div className="flex items-center gap-[16px] mb-[16px] animate-pulse">
+              <div className="w-[100px] h-[100px] rounded-full bg-field shrink-0"></div>
+              <div className="flex flex-col gap-[8px] w-full">
+                <div className="h-[27px] w-[120px] bg-field rounded"></div>
+                <div className="h-[24px] w-[80px] bg-field rounded"></div>
+              </div>
             </div>
-            <div>
-              <p className="text-[20px] leading-[27px] font-bold">{user.name}</p>
-              <DutyStatusBadge status={user.status} />
+          ) : (
+            <div className="flex items-center gap-[16px] mb-[16px]">
+              <div className="relative">
+                <ProfileAvatar
+                  avatarUrl={user.avatarUrl}
+                  size={100}
+                />
+              </div>
+              <div>
+                <p className="text-[20px] leading-[27px] font-bold">{user.name}</p>
+                <DutyStatusBadge status={user.status} />
+              </div>
             </div>
-          </div>
+          )}
           <SecondaryButton
             isThin={true}
             onClick={e => handleProfileChangeJump(e)}
