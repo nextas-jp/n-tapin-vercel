@@ -24,6 +24,7 @@ export function UserProvider({ children }) {
   const [clockedInAt, setClockedInAt] = useState(null);
   const [clockedOutAt, setClockedOutAt] = useState(null);
   const [currentAttendanceId, setCurrentAttendanceId] = useState(null);
+  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
 
 
   // MEMO: keep the session/user in React state, reads from that state once instead of hitting the network each time
@@ -37,7 +38,7 @@ export function UserProvider({ children }) {
         // 1. プロフィール情報（名前・アバター画像）の取得
         const response = await supabase
           .from("users")
-          .select("username, avatar_url")
+          .select("username, avatar_url, is_notifications_enabled")
           .eq("id", session.user.id);
 
         if (response.data && response.data.length > 0) {
@@ -199,10 +200,12 @@ export function UserProvider({ children }) {
           status,
           clockedInAt,
           clockedOutAt,
+          isNotificationsEnabled
         },
         authLoading,
         setAvatarFile,
         setNotificationsAllRead,
+        setIsNotificationsEnabled,
         setUsername,
         addPost,
         saveUserDataToDB,
