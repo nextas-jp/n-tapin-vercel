@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useUser } from "../user-context";
 import { PageHeader } from "@/components/PageHeader";
 import { createBrowserClient } from "@/utils/supabase/client";
 
@@ -8,12 +9,20 @@ import { createBrowserClient } from "@/utils/supabase/client";
 import { deleteUserFromTapIn } from "@/actions/user";
 
 export default function Settings() {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true); // "checked"からbooleanに変更推奨
+  const { user, setIsNotificationsEnabled, saveUserDataToDB } = useUser();
   const [isModalOpen, setModalIsOpen] = useState(false);
-  
+
   // ▼ 追加: 退会モーダル用のステート
   const [isWithdrawModalOpen, setWithdrawModalOpen] = useState(false);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
+
+  const handleNotificationToggle = async (e) => {
+    const newValue = e.target.checked;
+    // UIを即座に反映	
+    setIsNotificationsEnabled(newValue);
+    // DB（Supabase）に保存	
+    await saveUserDataToDB("is_notifications_enabled", newValue);
+  };
 
   // Hubからの「道連れログアウト指示」を裏で受信する透明な処理
   useEffect(() => {
@@ -35,7 +44,7 @@ export default function Settings() {
         }
 
         const supabase = createBrowserClient();
-        await supabase.auth.signOut().catch(() => {});
+        await supabase.auth.signOut().catch(() => { });
 
         window.location.href = returnTo;
       };
@@ -65,27 +74,27 @@ export default function Settings() {
     setIsWithdrawing(true);
     try {
       const supabase = createBrowserClient();
-      
+
       // 1. 現在ログインしているユーザーのIDを取得
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
+      const { data: { user: supabaseUser }, error: userError } = await supabase.auth.getUser();
+      if (userError || !supabaseUser) {
         alert("ユーザー情報の取得に失敗しました。");
         return;
       }
 
       // 2. Server Actionsを呼び出してDB上の退会処理（論理削除＋監査ログ）を実行
-      const result = await deleteUserFromTapIn(user.id);
+      const result = await deleteUserFromTapIn(supabaseUser.id);
 
       if (result.success) {
         // 3. 成功したらローカルのクッキー/ストレージを掃除してログイン画面へ
-        await supabase.auth.signOut().catch(() => {});
+        await supabase.auth.signOut().catch(() => { });
         Object.keys(window.localStorage).forEach((key) => {
           if (key.startsWith('sb-')) window.localStorage.removeItem(key);
         });
         window.sessionStorage.clear();
-        
+
         alert("退会処理が完了しました。ご利用ありがとうございました。");
-        
+
         // Hubのログイン画面、またはTapInのルートへリダイレクト
         const hubBaseUrl = process.env.NEXT_PUBLIC_SUPABASE_HUB_URL || 'http://localhost:3001';
         window.location.href = `${hubBaseUrl}/login`;
@@ -117,8 +126,8 @@ export default function Settings() {
                 <input
                   id="switch-component-blue"
                   type="checkbox"
-                  checked={notificationsEnabled}
-                  onChange={(e) => setNotificationsEnabled(e.target.checked)}
+                  checked={user.isNotificationsEnabled}
+                  onChange={handleNotificationToggle}
                   className="peer appearance-none w-9 h-6 bg-[#d9d9d9] rounded-full checked:bg-green-500 cursor-pointer transition-colors duration-300" />
                 <label htmlFor="switch-component-blue" className="absolute top-0 left-0 w-6 h-6 bg-white rounded-full border border-slate-300 shadow-sm transition-transform duration-300 peer-checked:translate-x-4 peer-checked:border-green-500 cursor-pointer">
                 </label>
@@ -132,7 +141,7 @@ export default function Settings() {
                 <span className="relative block w-full">ログアウト<i className="chevron-icon !right-[5px]"></i></span>
               </button>
             </li>
-            
+
             <li className="settings-item border-t border-gray-100 pt-4">
               <button
                 className="relative w-full text-left"
