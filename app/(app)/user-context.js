@@ -200,6 +200,7 @@ export function UserProvider({ children }) {
           clockedInAt,
           clockedOutAt,
         },
+        authLoading,
         setAvatarFile,
         setNotificationsAllRead,
         setUsername,

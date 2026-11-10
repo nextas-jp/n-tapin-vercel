@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SecondaryButton } from "@/components/Buttons";
@@ -8,6 +9,7 @@ import { Logo } from "@/components/Logo";
 import { useUser } from "../user-context";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import DutyStatusBadge from "@/components/DutyStatusBadge";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 /**
  * //TODO: create a ProfileCard and a PhotoGrid Component (it should speed up overall rendering)
@@ -15,18 +17,43 @@ import DutyStatusBadge from "@/components/DutyStatusBadge";
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, authLoading } = useUser();
   const { posts } = user;
 
+
+  // ▼▼▼ 追記: RLSテスト用の状態管理とデータ取得 ▼▼▼
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    async function fetchNotes() {
+      const supabase = createBrowserClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log("【確認用】現在のTapIn UID:", user?.id);
+      console.log("【確認用】裏側の連携帳簿 (auth.identities):", user?.identities);
+      // test_notesテーブルから全件取得しようと試みる
+      const { data, error } = await supabase.from('rls_test').select('*');
+      console.log(data);
+
+      if (error) {
+        console.error("データの取得に失敗しました:", error);
+      } else {
+        setNotes(data || []);
+
+      }
+    }
+    fetchNotes();
+  }, []);
+  // ▲▲▲ ここまで ▲▲▲
+
   // console.log(posts);
-  
+
 
   function handleProfileChangeJump(event) {
     event.preventDefault();
 
     router.push('/profile/edit');
   }
-  
+
 
   return (
     <>
@@ -53,8 +80,8 @@ export default function Dashboard() {
           <span className="relative size-[30px]">
             <i className={`absolute top-px right-px w-[9px] h-[9px] aspect-square ${!user.notificationsAllRead && "bg-red-500"} rounded-full`}></i>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="30" height="30" viewBox="0 0 30 30">
-              <path fillRule="evenodd" clipRule="evenodd" d="M15 22.3096C22.049 22.3096 25.3101 21.4053 25.625 17.7756C25.625 14.1485 23.3514 14.3817 23.3514 9.93139C23.3514 6.45517 20.0565 2.5 15 2.5C9.94346 2.5 6.64856 6.45517 6.64856 9.93139C6.64856 14.3817 4.375 14.1485 4.375 17.7756C4.69119 21.419 7.95222 22.3096 15 22.3096Z" stroke="#323232" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17.9861 26.0715C16.2809 27.9649 13.6209 27.9874 11.8994 26.0715" stroke="#323232" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M15 22.3096C22.049 22.3096 25.3101 21.4053 25.625 17.7756C25.625 14.1485 23.3514 14.3817 23.3514 9.93139C23.3514 6.45517 20.0565 2.5 15 2.5C9.94346 2.5 6.64856 6.45517 6.64856 9.93139C6.64856 14.3817 4.375 14.1485 4.375 17.7756C4.69119 21.419 7.95222 22.3096 15 22.3096Z" stroke="#323232" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M17.9861 26.0715C16.2809 27.9649 13.6209 27.9874 11.8994 26.0715" stroke="#323232" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         </Link>
@@ -62,35 +89,38 @@ export default function Dashboard() {
 
       <section className="relative">
         <div className="card-element">
-          <div className="flex items-center gap-[16px] mb-[16px]">
-            <div className="relative">
-              {/* <Image
-                src={user.avatarUrl}
-                width={100}
-                height={100}
-                alt={`${user.name}のプロフィル画像`}
-                className="shrink-0 rounded-full object-cover"
-              /> */}
-              <ProfileAvatar
-                avatarUrl={user.avatarUrl}
-                size={100}
-              />
+          {authLoading ? (
+            <div className="flex items-center gap-[16px] mb-[16px] animate-pulse">
+              <div className="w-[100px] h-[100px] rounded-full bg-field shrink-0"></div>
+              <div className="flex flex-col gap-[8px] w-full">
+                <div className="h-[27px] w-[120px] bg-field rounded"></div>
+                <div className="h-[24px] w-[80px] bg-field rounded"></div>
+              </div>
             </div>
-            <div>
-              <p className="text-[20px] leading-[27px] font-bold">{user.name}</p>
-              <DutyStatusBadge status={user.status} />
+          ) : (
+            <div className="flex items-center gap-[16px] mb-[16px]">
+              <div className="relative">
+                <ProfileAvatar
+                  avatarUrl={user.avatarUrl}
+                  size={100}
+                />
+              </div>
+              <div>
+                <p className="text-[20px] leading-[27px] font-bold">{user.name}</p>
+                <DutyStatusBadge status={user.status} />
+              </div>
             </div>
-          </div>
+          )}
           <SecondaryButton
             isThin={true}
-            onClick={ e => handleProfileChangeJump(e) }
+            onClick={e => handleProfileChangeJump(e)}
           >プロフィールを編集</SecondaryButton>
         </div>
 
         <div className="mt-[40px]">
           <ul className="grid grid-cols-3 gap-[8px]">
-            { posts.map(post => {
-              return(
+            {posts.map(post => {
+              return (
                 <li
                   key={post}
                   className="aspect-square overflow-hidden rounded-[10px] bg-field"
@@ -105,10 +135,27 @@ export default function Dashboard() {
                   />
                 </li>
               );
-            }) }
+            })}
             {/* <li className="aspect-square overflow-hidden rounded-[10px] bg-field"></li> */}
           </ul>
         </div>
+
+        {/* ▼▼▼ 追記: RLSテスト結果の表示エリア ▼▼▼ */}
+        <div className="mt-[40px] p-[16px] bg-field rounded-[10px]">
+          <h2 className="text-[18px] font-bold mb-[8px]">RLSテスト結果（test_notes）</h2>
+          {notes.length === 0 ? (
+            <p className="text-[14px] text-caption">データを取得中、またはデータがありません...</p>
+          ) : (
+            <ul className="flex flex-col gap-[8px]">
+              {notes.map(note => (
+                <li key={note.id} className="p-[12px] bg-surface rounded-[5px] shadow-sm text-[14px]">
+                  {note.note}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {/* ▲▲▲ ここまで ▲▲▲ */}
       </section>
     </>
   );
