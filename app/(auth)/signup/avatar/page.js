@@ -11,7 +11,7 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 export default function SignUpAvatar() {
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const { avatarUrl, setAvatarFile } = useSignup(); // MEMO: object here if typescript is used later
+  const { avatarPreviewUrl, setAvatarFile } = useSignup();
 
   function handleSubmit(event) {
     //TODO: Add supabase ressource saving
@@ -47,11 +47,11 @@ export default function SignUpAvatar() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-[24px]">
           <div className="card-element flex justify-center">
             <ProfileAvatar
-              avatarUrl={avatarUrl}
+              avatarUrl={avatarPreviewUrl}
             />
           </div>
           <div className="card-element flex flex-col gap-[8px]">
-            {avatarUrl ? (
+            {avatarPreviewUrl ? (
               <>
                 <PrimaryButton>次へ</PrimaryButton>
                 <SecondaryButton type="button" onClick={ openFilePicker }>写真を変更</SecondaryButton>      

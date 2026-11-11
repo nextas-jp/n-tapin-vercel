@@ -6,6 +6,7 @@ export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
   const invite = searchParams.get('invite');
+  const next = searchParams.get("next") ?? "/";
 
   if (code) {
     const supabase = await createServerClient();
@@ -35,7 +36,7 @@ export async function GET(request) {
               );
 
               if (memberError) {
-                console.error('membership insert failed', mErr.message);
+                console.error('membership insert failed', memberError.message);
               }
             }
           }
@@ -43,7 +44,7 @@ export async function GET(request) {
           console.error('invite step failed', e)
         }
       }
-      return NextResponse.redirect(`${origin}/`)
+      return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
