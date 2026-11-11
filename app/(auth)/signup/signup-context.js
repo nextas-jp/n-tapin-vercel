@@ -10,15 +10,23 @@ export function SignupProvider({ children }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [avatarUrl, setAvatarFile] = useObjectUrl();
+  const [avatarFile, setAvatarFileState] = useState(null);
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useObjectUrl();
+
+  function handleSetAvatar(file) {
+    setAvatarFileState(file);
+    setAvatarPreviewUrl(file);
+  }
 
   return (
     <SignupContext.Provider
-      value={{ 
-        email, setEmail, 
-        password, setPassword, 
-        username, setUsername, 
-        avatarUrl, setAvatarFile 
+      value={{
+        email, setEmail,
+        password, setPassword,
+        username, setUsername,
+        avatarFile,
+        avatarPreviewUrl,
+        setAvatarFile: handleSetAvatar
       }}
     >
       {children}
