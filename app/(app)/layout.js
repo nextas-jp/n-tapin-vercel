@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createServerClient } from '@/utils/supabase/server'; 
+import { createServerClient } from '@/utils/supabase/server';
 // ▼ 追加: システム権限用のクライアントを作成するためにインポート
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 
@@ -8,8 +8,8 @@ import { UserProvider } from "./user-context";
 import BottomNav from "@/components/BottomNav";
 
 export default async function AppLayout({ children }) {
-  const supabase = await createServerClient(); 
-  
+  const supabase = await createServerClient();
+
   // 1. ログイン状態の確認
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -38,13 +38,11 @@ export default async function AppLayout({ children }) {
   // 3. 正常なユーザーのみ既存のUIを描画
   return (
     <div className="flex flex-1 flex-col items-center justify-start pt-[60px] pb-[90px] bg-background px-[20px]">
-      <main className="flex w-full max-w-[430px] flex-col gap-[40px]">
-          <ViewTransition>
-            <UserProvider>
-              {children}
-              <BottomNav />
-            </UserProvider>
-          </ViewTransition>
+      <main className="w-full max-w-[430px]">
+        <UserProvider>
+          {children}
+          <BottomNav />
+        </UserProvider>
       </main>
     </div>
   );
