@@ -5,6 +5,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js';
 
 import { ViewTransition } from 'react';
 import { UserProvider } from "./user-context";
+import { WorkspaceProvider } from "./workspace-test/workspace-context"; //MEMO testing from `workspace-test` folder
 import BottomNav from "@/components/BottomNav";
 
 export default async function AppLayout({ children }) {
@@ -40,10 +41,12 @@ export default async function AppLayout({ children }) {
     <div className="flex flex-1 flex-col items-center justify-start pt-[60px] pb-[90px] bg-background px-[20px]">
       <main className="flex w-full max-w-[430px] flex-col gap-[40px]">
           <ViewTransition>
-            <UserProvider>
-              {children}
-              <BottomNav />
-            </UserProvider>
+            <WorkspaceProvider>
+              <UserProvider>
+                {children}
+                <BottomNav />
+              </UserProvider>
+            </WorkspaceProvider>
           </ViewTransition>
       </main>
     </div>
