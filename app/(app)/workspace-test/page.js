@@ -17,13 +17,13 @@ export default function Test() {
   useEffect(() => {
     if (!current) return;
 
-    getUser();
+    initUser();
 
     supabase.from('attendances').select('id, tenant_id, clock_in_at')
       .eq('tenant_id', current.tenant_id).then(({ data }) => setRows(data ?? []))
     }, [current?.tenant_id]);
 
-    async function getUser() {
+    async function initUser() {
         const { data } = await supabase.auth.getUser();
         //console.log(data);
 

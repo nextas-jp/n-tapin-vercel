@@ -9,6 +9,9 @@ import { formatDate, formatTime } from "@/utils/misc/format";
 import { useUser } from "../user-context";
 import ClockActions from "@/components/ClockActions";
 
+import WorkspaceSwitcher from '@/components/WorkspaceSwitcher';
+
+
 export default function Attendance() {
   const router = useRouter();
   const now = useCurrentMinute();
@@ -44,7 +47,7 @@ export default function Attendance() {
         backLinkUrl="/dashboard"
         title="出勤打刻"
       />
-
+      <WorkspaceSwitcher />
       <section className="relative">
         <div className="card-element flex flex-col">
           <div className="flex flex-col items-center gap-[32px]">

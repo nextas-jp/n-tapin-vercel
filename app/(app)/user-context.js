@@ -5,6 +5,9 @@ import { createContext, useCallback, useContext, useState, useEffect } from "rea
 import { default as fakeUser } from "@/utils/dummydata/user";
 import { createBrowserClient } from "@/utils/supabase/client";
 
+import { useWorkspace } from '../(app)/workspace-test/workspace-context';
+
+
 const UserContext = createContext(null);
 const supabase = createBrowserClient(); //MEMO: init Supabase
 
@@ -13,6 +16,8 @@ const supabase = createBrowserClient(); //MEMO: init Supabase
 // プロフィール編集 changes the name
 // and photo that ホーム shows, 新規投稿 adds to its photo grid, and 出勤打刻 / 退勤打刻 set the work status. It all resets on reload until there is an API.
 export function UserProvider({ children }) {
+  const { current: currentWorkspace } = useWorkspace(); //MEMO: to update to the correct workspace in clockin/clickout
+  const [tenantId, settenantId] = useState(null);
   const [authUser, setAuthUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -28,6 +33,12 @@ export function UserProvider({ children }) {
 
   // MEMO: keep the session/user in React state, reads from that state once instead of hitting the network each time
   useEffect(() => {
+
+
+    settenantId(currentWorkspace?.tenant_id);
+    console.log(tenantId);
+
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -91,7 +102,7 @@ export function UserProvider({ children }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [currentWorkspace]);
 
 
   const readUserDataFromDB = useCallback(async (key, id) => {
@@ -141,6 +152,7 @@ export function UserProvider({ children }) {
       .from("attendances")
       .insert({
         user_id: authUser.id,
+        tenant_id: tenantId,
         clock_in_at: time.toISOString(), // データベース用の時刻フォーマット
       })
       .select("id")
